@@ -3,6 +3,10 @@
 	"displayName": "Veramo",
 	"description": "Verifiable data management",
 	"version": "0.0.1",
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/veramolabs/veramo-vscode.git"
+  },
 	"engines": {
 		"vscode": "^1.65.0"
 	},
