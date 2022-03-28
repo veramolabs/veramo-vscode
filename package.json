@@ -1,6 +1,6 @@
 {
 	"name": "veramo-vscode",
-	"displayName": "Veramo for VS Code",
+	"displayName": "Veramo",
 	"description": "Verifiable data management",
 	"version": "0.0.1",
 	"engines": {
@@ -10,19 +10,19 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:veramo-vscode.handleMessage",
-		"onCommand:veramo-vscode.resolveDid"
+		"onCommand:veramo.verify",
+		"onCommand:veramo.resolve"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "veramo-vscode.handleMessage",
-				"title": "Handle message",
+				"command": "veramo.verify",
+				"title": "Verify JWT",
 				"category": "Veramo"
 			},
 			{
-				"command": "veramo-vscode.resolveDid",
+				"command": "veramo.resolve",
 				"title": "Resolve DID",
 				"category": "Veramo"
 			}
@@ -64,6 +64,7 @@
 		"cross-fetch": "^3.1.5",
 		"did-resolver": "^3.1.5",
 		"ethr-did-resolver": "^5.0.4",
+		"json-pretty-html": "^1.1.6",
 		"web-did-resolver": "^2.0.12"
 	}
 }
