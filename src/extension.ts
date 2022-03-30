@@ -1,8 +1,9 @@
-import "cross-fetch/polyfill";
 import * as vscode from "vscode";
+import type MarkdownIt from 'markdown-it';
 import { agent } from "./setup";
 import { getWebviewContentForMessage } from "./webviews/message";
 import { getWebviewContentForDIDResolution } from "./webviews/diddocument";
+import { markdownPlugin } from "./markdown";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -99,6 +100,13 @@ export function activate(context: vscode.ExtensionContext) {
       return true;
     });
   }));
+
+  return {
+    extendMarkdownIt(md: MarkdownIt) {
+        return md.use(markdownPlugin);
+    }
+  };
+
 }
 
 // this method is called when your extension is deactivated

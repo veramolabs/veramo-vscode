@@ -7,9 +7,9 @@
 	"publisher": "veramo",
 	"icon": "images/logo.png",
 	"repository": {
-    "type": "git",
-    "url": "https://github.com/veramolabs/veramo-vscode.git"
-  },
+		"type": "git",
+		"url": "https://github.com/veramolabs/veramo-vscode.git"
+	},
 	"engines": {
 		"vscode": "^1.65.0"
 	},
@@ -22,6 +22,13 @@
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
+		"markdown.markdownItPlugins": true,
+		"markdown.previewScripts": [
+			"./dist/markdown-page.js"
+		],
+		"markdown.previewStyles": [
+			"./src/style.css"
+		],
 		"commands": [
 			{
 				"command": "veramo.verify",
@@ -38,6 +45,8 @@
 	"scripts": {
 		"vscode:prepublish": "yarn run package",
 		"compile": "webpack",
+		"compile-page:dev": "webpack --config ./webpack-page.config.js",
+		"compile-page": "webpack --mode=production --config ./webpack-page.config.js",
 		"watch": "webpack --watch",
 		"package": "webpack --mode production --devtool hidden-source-map",
 		"compile-tests": "tsc -p . --outDir out",
@@ -63,15 +72,19 @@
 		"webpack-cli": "^4.9.2"
 	},
 	"dependencies": {
-		"@veramo/core": "^3.1.0",
-		"@veramo/credential-w3c": "^3.1.0",
-		"@veramo/did-jwt": "^3.1.0",
-		"@veramo/did-resolver": "^3.1.0",
-		"@veramo/message-handler": "^3.1.0",
+		"@types/markdown-it": "^12.2.3",
+		"@veramo/core": "^3.1.2-next.59",
+		"@veramo/credential-w3c": "^3.1.2-next.59",
+		"@veramo/did-jwt": "^3.1.2-next.59",
+		"@veramo/did-resolver": "^3.1.2-next.59",
+		"@veramo/message-handler": "^3.1.2-next.59",
 		"cross-fetch": "^3.1.5",
+		"date-fns": "^2.28.0",
+		"did-jwt-vc": "^2.1.9",
 		"did-resolver": "^3.1.5",
 		"ethr-did-resolver": "^5.0.4",
 		"json-pretty-html": "^1.1.6",
+		"jwt-decode": "^3.1.2",
 		"web-did-resolver": "^2.0.12"
 	}
 }

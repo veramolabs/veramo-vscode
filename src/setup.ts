@@ -1,3 +1,4 @@
+import "cross-fetch/polyfill";
 import { createAgent, IMessageHandler, IResolver, TAgent } from "@veramo/core";
 
 import { DIDResolverPlugin } from "@veramo/did-resolver";
