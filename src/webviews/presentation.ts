@@ -1,37 +1,28 @@
-import { VerifiableCredential } from "@veramo/core";
+import { VerifiableCredential, VerifiablePresentation } from "@veramo/core";
 import { formatDistanceToNow } from 'date-fns';
+import { credentialToHTML } from "./credential";
 
-export function credentialToHTML(vc: VerifiableCredential, jwt?: string) {
-  //FIXME there is something weird with VerifiableCredential type in the @next branch
-  let issuer = (vc.issuer as any).id as string;
+export function presentationToHTML(vp: VerifiablePresentation, jwt?: string) {
+  //FIXME there is something weird with VerifiablePresentation type in the @next branch
+  let issuer = (vp.holder as any) as string;
   issuer = `${issuer.slice(0, 16)}...${issuer.slice(-4)}`;
-  const type = (vc.type as string[]).join(', ');
+  const type = (vp.type as string[]).join(', ');
   
-  if (vc.credentialSubject.id) {
-    vc.credentialSubject.id = `${vc.credentialSubject.id.slice(
-      0,
-      16
-    )}...${vc.credentialSubject.id.slice(-4)}`;
-  }
   return `<div class="veramo" ${jwt ? `data-jwt="${jwt}"` : ''}>
-            <div class="verification">${vc.proof.type ? checkmark : spinner}</div>
-            ${vc.credentialSubject.description || ``}
+            <div class="verification">${vp.proof.type ? checkmark : spinner}</div>
+            <div class="veramo-details">
+            <table>
+              <tr><td colspan="2"> ${type}</td></tr>
+              <tr><td colspan="2"> ${vp.verifiableCredential?.map(vc => credentialToHTML(vc as any as VerifiableCredential))}</td></tr>
+            </table>
+          </div>
+            
             <div class="veramo-footer">
-                ${formatDistanceToNow(new Date(vc.issuanceDate), {
+                ${vp.issuanceDate && formatDistanceToNow(new Date(vp.issuanceDate), {
                   addSuffix: true,
                 })} 
                 by <b>${issuer}</b>
               </div>
-
-          <details>
-  <summary>${type}</summary>
-  <div class="veramo-details">
-            <table>
-              ${objectToTableRows(vc.credentialSubject)}
-            </table>
-          </div>
-</details>
-            
           </div>`;
 }
 

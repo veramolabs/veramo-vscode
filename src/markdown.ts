@@ -1,9 +1,10 @@
 import type MarkdownIt from 'markdown-it';
 import Renderer from 'markdown-it/lib/renderer';
 import Token from 'markdown-it/lib/token';
-import { normalizeCredential } from 'did-jwt-vc';
+import { normalizeCredential, normalizePresentation } from 'did-jwt-vc';
 import decode from 'jwt-decode';
 import { credentialToHTML } from './webviews/credential';
+import { presentationToHTML } from './webviews/presentation';
 
 
 export function markdownPlugin(md: MarkdownIt){
@@ -15,9 +16,15 @@ export function markdownPlugin(md: MarkdownIt){
     const token = tokens[idx];
     if (token.info === 'jwt') {
       try {
-        const decoded = decode(token.content);
-        const vc = normalizeCredential(decoded as any);
-        return credentialToHTML(vc, token.content.trim());
+        const decoded: any = decode(token.content);
+
+        if (decoded.vc?.type?.includes('VerifiableCredential')) {
+          const vc = normalizeCredential(decoded as any);
+          return credentialToHTML(vc, token.content.trim());
+        }else if (decoded.vp?.type?.includes('VerifiablePresentation')) {
+          const vp = normalizePresentation(decoded as any);
+          return presentationToHTML(vp, token.content.trim());
+        }
 
       } catch (e) {
         // noop

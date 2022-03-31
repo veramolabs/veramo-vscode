@@ -1,5 +1,6 @@
 import { agent } from './setup';
 import { credentialToHTML } from './webviews/credential';
+import { presentationToHTML } from './webviews/presentation';
 
 function init() {
   // @ts-ignore
@@ -10,7 +11,10 @@ function init() {
       agent.handleMessage({ raw: jwt })
       .then(message => {
         if (message.type === 'w3c.vc' && message.credentials) {
-          container.innerHTML = credentialToHTML(message.credentials[0]);
+          container.outerHTML = credentialToHTML(message.credentials[0]);
+        }
+        if (message.type === 'w3c.vp' && message.presentations) {
+          container.outerHTML = presentationToHTML(message.presentations[0]);
         }
       })
       .catch((e: any) => {
