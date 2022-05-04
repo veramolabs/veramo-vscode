@@ -14,7 +14,7 @@ export function markdownPlugin(md: MarkdownIt){
   function fence(tokens: Token[], idx: number, options: MarkdownIt.Options, env: any, self: Renderer): string {
 
     const token = tokens[idx];
-    if (token.info === 'jwt') {
+    if (token.info === 'vc+jwt') {
       try {
         const decoded: any = decode(token.content);
 
