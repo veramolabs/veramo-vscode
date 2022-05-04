@@ -23,6 +23,9 @@ Select a `JWT` string and run `Veramo: Verify JWT` command
 
 Initial release of Veramo extension with minimal feature set
 
+### 0.0.2
+
+Added ability to preview and verify `vc+jwt` code blocks in markdown files
 
 # Sample data
 
