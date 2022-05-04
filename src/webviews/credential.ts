@@ -13,24 +13,27 @@ export function credentialToHTML(vc: VerifiableCredential, jwt?: string) {
       16
     )}...${vc.credentialSubject.id.slice(-4)}`;
   }
+  
   return `<div class="veramo" ${jwt ? `data-jwt="${jwt}"` : ''}>
             <div class="verification">${vc.proof.type ? checkmark : spinner}</div>
-            ${vc.credentialSubject.description || ``}
-            <div class="veramo-footer">
-                ${formatDistanceToNow(new Date(vc.issuanceDate), {
-                  addSuffix: true,
-                })} 
-                by <b>${issuer}</b>
-              </div>
+            <div class="description">${vc.credentialSubject.description || ''}</div>
 
-          <details>
-  <summary>${type}</summary>
-  <div class="veramo-details">
-            <table>
-              ${objectToTableRows(vc.credentialSubject)}
-            </table>
-          </div>
-</details>
+            <details>
+              <summary class="veramo-summary">${type}</summary>
+              <div class="veramo-details">
+              <table>
+                ${objectToTableRows(vc.credentialSubject)}
+              </table>
+              </div>
+            </details>
+            
+            <div class="veramo-footer">
+              ${formatDistanceToNow(new Date(vc.issuanceDate), {
+                addSuffix: true,
+              })} 
+              by <b>${issuer}</b>
+            </div>
+
             
           </div>`;
 }

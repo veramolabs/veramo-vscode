@@ -11,18 +11,18 @@ export function presentationToHTML(vp: VerifiablePresentation, jwt?: string) {
   return `<div class="veramo" ${jwt ? `data-jwt="${jwt}"` : ''}>
             <div class="verification">${vp.proof.type ? checkmark : spinner}</div>
             <div class="veramo-details">
-            <table>
-              <tr><td colspan="2"> ${type}</td></tr>
-              <tr><td colspan="2"> ${vp.verifiableCredential?.map(vc => credentialToHTML(vc as any as VerifiableCredential))}</td></tr>
-            </table>
-          </div>
+              <table>
+                <tr><td colspan="2"> ${type}</td></tr>
+                <tr><td colspan="2"> ${vp.verifiableCredential?.map(vc => credentialToHTML(vc as any as VerifiableCredential))}</td></tr>
+              </table>
+            </div>
             
             <div class="veramo-footer">
-                ${vp.issuanceDate && formatDistanceToNow(new Date(vp.issuanceDate), {
-                  addSuffix: true,
-                })} 
-                by <b>${issuer}</b>
-              </div>
+              ${vp.issuanceDate && formatDistanceToNow(new Date(vp.issuanceDate), {
+                addSuffix: true,
+              })} 
+              by <b>${issuer}</b>
+            </div>
           </div>`;
 }
 
