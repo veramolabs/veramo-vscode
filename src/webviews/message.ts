@@ -294,25 +294,27 @@ export function getWebviewContentForMessage(message: IMessage) {
 
 
   .veramo {
-  position: relative;
-  border: 1px solid rgba(128, 128, 128, 0.5);
-  border-radius: 15px;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.verification {
-  /* display: inline-block; */
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-.veramo-footer {
-  opacity: 0.6;
-  font-size: small;
-  margin-top: 15px;
-}
+    position: relative;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 15px;
+    padding: 15px;
+  }
+  
+  .verification {
+    /* display: inline-block; */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+  
+  .veramo-footer {
+    opacity: 0.6;
+    font-size: small;
+  }
+  
+  .veramo-summary {
+    opacity: 0.7;
+  }
 
   </style>
 </head>
