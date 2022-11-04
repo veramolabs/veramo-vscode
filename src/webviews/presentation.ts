@@ -5,7 +5,7 @@ import { credentialToHTML } from "./credential";
 export function presentationToHTML(vp: VerifiablePresentation, jwt?: string) {
   //FIXME there is something weird with VerifiablePresentation type in the @next branch
   let issuer = (vp.holder as any) as string;
-  issuer = `${issuer.slice(0, 16)}...${issuer.slice(-4)}`;
+  // issuer = `${issuer.slice(0, 16)}...${issuer.slice(-4)}`;
   const type = (vp.type as string[]).join(', ');
   
   return `<div class="veramo" ${jwt ? `data-jwt="${jwt}"` : ''}>

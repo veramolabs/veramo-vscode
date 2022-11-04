@@ -7,11 +7,11 @@ import { getResolver as ethrDidResolver } from "ethr-did-resolver";
 import { getResolver as webDidResolver } from "web-did-resolver";
 import { MessageHandler } from "@veramo/message-handler";
 import { JwtMessageHandler } from "@veramo/did-jwt";
-import { W3cMessageHandler } from "@veramo/credential-w3c";
+import { W3cMessageHandler, ICredentialIssuer, ICredentialVerifier, CredentialPlugin } from "@veramo/credential-w3c";
 
 const INFURA_PROJECT_ID = "3586660d179141e3801c3895de1c2eba";
 
-type InstalledPlugins = IResolver & IMessageHandler;
+type InstalledPlugins = IResolver & IMessageHandler & ICredentialIssuer & ICredentialVerifier;
 
 export const agent: TAgent<InstalledPlugins> = createAgent<InstalledPlugins>({
   plugins: [
@@ -24,5 +24,6 @@ export const agent: TAgent<InstalledPlugins> = createAgent<InstalledPlugins>({
     new MessageHandler({
       messageHandlers: [new JwtMessageHandler(), new W3cMessageHandler()],
     }),
+    new CredentialPlugin(),
   ],
 });

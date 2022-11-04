@@ -1,19 +1,9 @@
-import { IMessage } from "@veramo/core";
+import { IVerifyResult } from "@veramo/core";
 import { credentialToHTML } from "./credential";
-import { presentationToHTML } from "./presentation";
 const pretty = require('json-pretty-html').default;
 
-export function getWebviewContentForMessage(message: IMessage) {
-  let m = JSON.stringify(message, null, 2); // Message
-
-  const c = message.credentials ? `<h2>W3C Credentials</h2>
-  ${message.credentials.map(vc => credentialToHTML(vc, vc.proof.jwt))}
-  ${pretty(message.credentials)}
-  ` : '';
-
-  const p = message.presentations ? `<h2>W3C Presentations</h2>
-  ${message.presentations.map(vp => presentationToHTML(vp, vp.proof.jwt))}
-  ${pretty(message.presentations)}`: '';
+export function getWebviewContentForCredentialVerificationResult(result: IVerifyResult) {
+  const c = credentialToHTML(result.verifiableCredential)
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -319,20 +309,13 @@ export function getWebviewContentForMessage(message: IMessage) {
   </style>
 </head>
 <body>
+  <h2>W3C Credential</h2>
   ${c}
-
-  ${p} 
-  <hr style="height:1px;border-width:0;color:gray;background-color:gray">
-
-  <h1>Type ${message.type}</h1>
-
-  <h2>Metadata</h2>
-  ${pretty(message.metaData)}
-
-  <h2>Data</h2>
-  ${pretty(message.data)}
-
   
+  <br/>
+
+  <h2>Verification result</h2>
+  ${pretty(JSON.parse(JSON.stringify(result)))}
 
 </body>
 </html>`;

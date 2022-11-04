@@ -4,15 +4,15 @@ import { formatDistanceToNow } from 'date-fns';
 export function credentialToHTML(vc: VerifiableCredential, jwt?: string) {
   //FIXME there is something weird with VerifiableCredential type in the @next branch
   let issuer = (vc.issuer as any).id as string;
-  issuer = `${issuer.slice(0, 16)}...${issuer.slice(-4)}`;
+  // issuer = `${issuer.slice(0, 16)}...${issuer.slice(-4)}`;
   const type = (vc.type as string[]).join(', ');
   
-  if (vc.credentialSubject.id) {
-    vc.credentialSubject.id = `${vc.credentialSubject.id.slice(
-      0,
-      16
-    )}...${vc.credentialSubject.id.slice(-4)}`;
-  }
+  // if (vc.credentialSubject.id) {
+  //   vc.credentialSubject.id = `${vc.credentialSubject.id.slice(
+  //     0,
+  //     16
+  //   )}...${vc.credentialSubject.id.slice(-4)}`;
+  // }
   
   return `<div class="veramo" ${jwt ? `data-jwt="${jwt}"` : ''}>
             <div class="verification">${vc.proof.type ? checkmark : spinner}</div>
