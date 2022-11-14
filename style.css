@@ -1,8 +1,9 @@
 .veramo {
   position: relative;
-  border: 1px solid rgba(128, 128, 128, 0.5);
-  border-radius: 15px;
+  border-radius: 5px;
+  border-left: 4px solid #73C394;
   padding: 15px;
+  background-color: rgba(0,0,0,0.1);
 }
 
 .verification {
@@ -123,4 +124,123 @@
   100% {
     transform: scaleY(-1) rotate(-135deg);
   }
+}
+
+
+
+.credential {
+  border: 1px solid var(--background-modifier-border);
+  padding: 10px;
+}
+
+.credential__issuer {
+  color: var(--text-muted);
+}
+
+.veramo__verification_result_footer {
+  /* border-top: 1px solid var(--background-modifier-border); */
+  /* margin-top: 10px; */
+  padding: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: small;
+  cursor: pointer;
+}
+
+.veramo__verification_result_footer_spacer {
+}
+
+.credential__kudos {
+  border-radius: 5px;
+  border-left: 4px solid #73C394;
+  padding: 15px;
+  background-color: rgba(0,0,0,0.1);
+}
+
+.credential__kudos_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.credential__kudos_author {
+  font-weight: 500;
+  font-size: small;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.credential__kudos_author_avatar {
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  margin-right: 10px;
+}
+
+.credential__kudos_title {
+  font-weight: 700;
+  font-size: medium;
+  margin-bottom: 10px;
+}
+
+.credential__kudos_kudos {
+  font-weight: normal;
+  font-size: medium;
+  margin-bottom: 10px;
+}
+
+.credential__kudos_footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: normal;
+  font-size: small;
+  color: var(--text-muted);
+
+}
+
+.credential__kudos_guild_avatar {
+  height: 16px;
+  width: 16px;
+  border-radius: 8px;
+  margin-right: 5px;
+}
+
+.credential__kudos_footer_spacer {
+  margin-right: 2px;
+  margin-left: 2px;
+}
+
+.credential__kudos_avatar {
+  height: 100px;
+  width: 100px;
+  min-height: 100px;
+  min-width: 100px;
+  border-radius: 5px;
+  margin-left: 15px;
+}
+
+.veramo__pointer {
+  cursor: pointer;
+}
+
+.credential__kudos_emoji {
+  margin-right: 5px;
+}
+
+.veramo__verified_icon {
+  margin-right: 5px;
+}
+
+.veramo__pre {
+  font-size: small;
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
