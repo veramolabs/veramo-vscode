@@ -882,6 +882,11 @@
     crypto-ld "^7.0.0"
     json-stringify-deterministic "^1.0.7"
 
+"@veramo-community/react-components@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@veramo-community/react-components/-/react-components-1.1.2.tgz#f9236bd778cbd38608188fd1282d117760f6267c"
+  integrity sha512-5xrxB3fxvxCyayN1fCIW6/tqHDUfIa5gPC2KK7UjYKoR80so3V5kSymaq1eKV6N5MVlyNDfuubprDW2o7OoXLg==
+
 "@veramo/core@^4.1.1":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@veramo/core/-/core-4.1.1.tgz#9174e94db6d80dc3645e21ea814a84a83347766b"

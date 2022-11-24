@@ -82,6 +82,7 @@
 	},
 	"dependencies": {
 		"@types/markdown-it": "^12.2.3",
+		"@veramo-community/react-components": "^1.1.2",
 		"@veramo/core": "^4.1.1",
 		"@veramo/credential-w3c": "^4.1.1",
 		"@veramo/did-jwt": "^4.1.1",

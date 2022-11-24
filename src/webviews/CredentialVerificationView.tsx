@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IVerifyResult, VerifiableCredential } from "@veramo/core";
-import { CredentialView } from "./CredentialView";
+import { VerifiableCredential as VerifiableCredentialView } from '@veramo-community/react-components';
 import { formatRelative } from 'date-fns';
 
 export const CredentialVerificationView = ({ verifyResult } : { verifyResult: IVerifyResult }) => {
@@ -10,7 +10,7 @@ export const CredentialVerificationView = ({ verifyResult } : { verifyResult: IV
     {verifyResult.error && <p>Error: {verifyResult.error.message}</p>}
     {!verifyResult.error 
       && verifyResult.verified 
-      && <CredentialView credential={credential} />}
+      && <VerifiableCredentialView credential={credential} />}
     
     {verifyResult.verified && <div className="veramo__verification_result_footer" >
       <svg
