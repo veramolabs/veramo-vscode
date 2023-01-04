@@ -7,8 +7,8 @@ import { markdownPlugin } from "./markdown";
 import { getWebviewContentForCredentialVerificationResult } from "./webviews/credentialVerification";
 import { didDocumentHoverProvider } from "./hover-providers";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+let verifiedStatusBarItem: vscode.StatusBarItem;
+
 export function activate(context: vscode.ExtensionContext) {
   
   context.subscriptions.push(vscode.commands.registerCommand('veramo.verifyCredential', async () => {
@@ -33,8 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
             new vscode.Range(selection.start, selection.end
           ));
         if (selectedText.length < 1) {
-          vscode.window.showErrorMessage('Please select text!');
-          return;
+          selectedText = editor.document.getText();
         }
   
         try {
@@ -154,14 +153,41 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.languages.registerHoverProvider('javascript', didDocumentHoverProvider);
   vscode.languages.registerHoverProvider('typescript', didDocumentHoverProvider);
 
+
+  verifiedStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
+  verifiedStatusBarItem.command = 'veramo.verifyCredential';
+	context.subscriptions.push(verifiedStatusBarItem);
+
+  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateVerifiedStatusBarItem));
+	vscode.workspace.onDidSaveTextDocument(updateVerifiedStatusBarItem, null, context.subscriptions);
+
+  updateVerifiedStatusBarItem();
+
   return {
     extendMarkdownIt(md: MarkdownIt) {
         return md.use(markdownPlugin);
     }
   };
+  
+}
 
+async function updateVerifiedStatusBarItem() {
+  verifiedStatusBarItem.hide();
+
+  const text = vscode.window.activeTextEditor?.document.getText();
+  if (text) {
+    try{
+      const result = await agent.verifyCredential({credential: JSON.parse(text)});
+      if (result.verified) {
+        verifiedStatusBarItem.text = `$(check) Verified`;
+        verifiedStatusBarItem.show();
+      }
+      
+    } catch (e) {
+      
+    }
+  }
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
-

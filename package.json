@@ -19,7 +19,8 @@
 	"activationEvents": [
 		"onCommand:veramo.verify",
 		"onCommand:veramo.verifyCredential",
-		"onCommand:veramo.resolve"
+		"onCommand:veramo.resolve",
+		"onStartupFinished"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
