@@ -5,6 +5,7 @@ import { getWebviewContentForMessage } from "./webviews/message";
 import { getWebviewContentForDIDResolution } from "./webviews/diddocument";
 import { markdownPlugin } from "./markdown";
 import { getWebviewContentForCredentialVerificationResult } from "./webviews/credentialVerification";
+import { didDocumentHoverProvider } from "./hover-providers";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -148,6 +149,10 @@ export function activate(context: vscode.ExtensionContext) {
       return true;
     });
   }));
+
+  vscode.languages.registerHoverProvider('markdown', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('javascript', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('typescript', didDocumentHoverProvider);
 
   return {
     extendMarkdownIt(md: MarkdownIt) {
