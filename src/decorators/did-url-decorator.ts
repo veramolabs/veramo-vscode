@@ -7,14 +7,6 @@ const didUrlDecorationType = vscode.window.createTextEditorDecorationType({
   textDecoration: 'underline',
   overviewRulerColor: 'green',
   overviewRulerLane: vscode.OverviewRulerLane.Right,
-  light: {
-    // this color will be used in light color themes
-    borderColor: 'darkgreen'
-  },
-  dark: {
-    // this color will be used in dark color themes
-    borderColor: 'lightgreen'
-  }
 });
 
 
