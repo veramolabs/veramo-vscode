@@ -1,6 +1,6 @@
 import { HoverProvider, Hover } from "vscode";
-import { agent } from "./setup";
-import { didDocumentResolutionToMarkdown, DID_MATCHER } from "./utils";
+import { agent } from "../setup";
+import { didDocumentResolutionToMarkdown, DID_MATCHER } from "../utils";
 
 export const didDocumentHoverProvider: HoverProvider = {
   async provideHover(document, position, token) {
@@ -19,4 +19,4 @@ export const didDocumentHoverProvider: HoverProvider = {
     
     return new Hover(contents, range);
   }
-}
+};

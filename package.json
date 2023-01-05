@@ -18,8 +18,8 @@
 	],
 	"activationEvents": [
 		"onCommand:veramo.verify",
-		"onCommand:veramo.verifyCredential",
-		"onCommand:veramo.resolve",
+		"onCommand:veramo.verify-credential",
+		"onCommand:veramo.resolve-did",
 		"onStartupFinished"
 	],
 	"main": "./dist/extension.js",
@@ -33,7 +33,7 @@
 		],
 		"commands": [
 			{
-				"command": "veramo.verifyCredential",
+				"command": "veramo.verify-credential",
 				"title": "Verify credential",
 				"category": "Veramo"
 			},
@@ -43,7 +43,7 @@
 				"category": "Veramo"
 			},
 			{
-				"command": "veramo.resolve",
+				"command": "veramo.resolve-did",
 				"title": "Resolve DID",
 				"category": "Veramo"
 			}
