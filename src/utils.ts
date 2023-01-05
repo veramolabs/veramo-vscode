@@ -11,6 +11,7 @@ const PATH = `(/[^#?]*)?`;
 const QUERY = `([?][^#]*)?`;
 const FRAGMENT = `(#.*)?`;
 export const DID_MATCHER = new RegExp(`did:${METHOD}:${METHOD_ID}${PARAMS}${PATH}${QUERY}${FRAGMENT}`);
+export const DID_MATCHER_GLOBAL = new RegExp(DID_MATCHER, 'g');
 
 
 export function didDocumentResolutionToMarkdown(resolutionResult: DIDResolutionResult): string {

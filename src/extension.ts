@@ -6,6 +6,7 @@ import { verifyCredentialCommand } from "./commands/verify-credential";
 import { verifyCommand } from "./commands/verify";
 import { resolveDidCommand } from "./commands/resolve-did";
 import { updateVerifiedStatusBarItem, verifiedStatusBarItem } from "./status-bar-items/verified-status-bar-item";
+import { triggerUpdateDecorations } from "./decorators/did-url-decorator";
 
 export function activate(context: vscode.ExtensionContext) {
   
@@ -22,6 +23,26 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.onDidSaveTextDocument(updateVerifiedStatusBarItem, null, context.subscriptions);
 
   updateVerifiedStatusBarItem();
+
+  let activeEditor = vscode.window.activeTextEditor;
+
+  if (activeEditor) {
+		triggerUpdateDecorations();
+	}
+
+	vscode.window.onDidChangeActiveTextEditor(editor => {
+		activeEditor = editor;
+		if (editor) {
+			triggerUpdateDecorations();
+		}
+	}, null, context.subscriptions);
+
+	vscode.workspace.onDidChangeTextDocument(event => {
+		if (activeEditor && event.document === activeEditor.document) {
+			triggerUpdateDecorations(true);
+		}
+	}, null, context.subscriptions);
+
 
   return {
     extendMarkdownIt(md: MarkdownIt) {

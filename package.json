@@ -20,7 +20,7 @@
 		"onCommand:veramo.verify",
 		"onCommand:veramo.verify-credential",
 		"onCommand:veramo.resolve-did",
-		"onStartupFinished"
+		"*"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
