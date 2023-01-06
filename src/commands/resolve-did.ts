@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { agent } from "../setup";
+import { getVeramo } from "../veramo";
 import { getWebviewContentForDIDResolution } from "../webviews/diddocument";
 
 export const resolveDidCommand = async () => {
@@ -29,7 +29,7 @@ export const resolveDidCommand = async () => {
       }
 
       try {
-        const result = await agent.resolveDid({ didUrl: selectedText });
+        const result = await getVeramo().resolveDid({ didUrl: selectedText });
 
         const panel = vscode.window.createWebviewPanel(
           'previewDidDocument',

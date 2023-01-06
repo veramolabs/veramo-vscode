@@ -51,21 +51,44 @@
 				"title": "Enable CodeLens",
 				"command": "veramo.enableCodeLens",
 				"category": "Veramo"
-		},
-		{
+			},
+			{
 				"title": "Disable Codelens",
 				"command": "veramo.disableCodeLens",
 				"category": "Veramo"
-		}
+			},
+			{
+				"title": "Enable Remote Instance",
+				"command": "veramo.enableRemoteInstance",
+				"category": "Veramo"
+			},
+			{
+				"title": "Disable Remote Instance",
+				"command": "veramo.disableRemoteInstance",
+				"category": "Veramo"
+			}
 		],
 		"configuration": {
 			"properties": {
-					"veramo.enableCodeLens": {
-							"type": "boolean",
-							"default": true
-					}
+				"veramo.enableCodeLens": {
+					"type": "boolean",
+					"default": true
+				},
+				"veramo.enableRemoteInstance": {
+					"type": "boolean",
+					"default": false,
+					"description": "Start your remote server by running `npx @veramo/cli server`"
+				},
+				"veramo.remoteAgentUrl": {
+					"type": "string",
+					"default": "http://localhost:3332/agent"
+				},
+				"veramo.remoteAgentApiKey": {
+					"type": "string",
+					"default": "test123"
+				}
 			}
-	}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run package",
@@ -80,7 +103,7 @@
 		"pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"update:veramo": "yarn add @veramo/core @veramo/credential-w3c @veramo/did-jwt @veramo/did-resolver @veramo/message-handler did-jwt-vc did-resolver ethr-did-resolver web-did-resolver"
+		"update:veramo": "yarn add @veramo/core @veramo/credential-w3c @veramo/did-jwt @veramo/did-resolver @veramo/message-handler did-jwt-vc did-resolver ethr-did-resolver web-did-resolver @veramo/remote-client"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",
@@ -107,6 +130,7 @@
 		"@veramo/did-jwt": "^4.2.0",
 		"@veramo/did-resolver": "^4.2.0",
 		"@veramo/message-handler": "^4.2.0",
+		"@veramo/remote-client": "^4.2.0",
 		"cross-fetch": "^3.1.5",
 		"date-fns": "^2.28.0",
 		"did-jwt-vc": "^3.1.0",

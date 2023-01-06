@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { agent } from '../setup';
+import { getVeramo } from '../veramo';
 
 /**
  * CodelensProvider
@@ -51,7 +51,7 @@ export class CodeBlocksProvider implements vscode.CodeLensProvider {
 			const end = new vscode.Position(line.lineNumber, 1);
 			const range = new vscode.Range(start, end);
 			try{
-				const message = await agent.handleMessage({raw: matches[1]});
+				const message = await getVeramo().handleMessage({raw: matches[1]});
 				let title = `${message.type} ${message.from} ${message.createdAt}`;
 
 				this.codeLenses.push(new vscode.CodeLens(range, {

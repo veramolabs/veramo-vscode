@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { agent } from "../setup";
+import { getVeramo } from "../veramo";
 
 const verifiedStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
 verifiedStatusBarItem.command = 'veramo.verify-credential';
@@ -11,9 +11,10 @@ export async function updateVerifiedStatusBarItem() {
   const text = vscode.window.activeTextEditor?.document.getText();
   if (text) {
     try{
-      const result = await agent.verifyCredential({credential: JSON.parse(text)});
+      const veramo = getVeramo();
+      const result = await veramo.verifyCredential({credential: JSON.parse(text)});
       if (result.verified) {
-        verifiedStatusBarItem.text = `$(check) Verified`;
+        verifiedStatusBarItem.text = `$(check) Verified (${veramo.context.name})`;
         verifiedStatusBarItem.show();
       }
       

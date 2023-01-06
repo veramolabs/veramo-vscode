@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { agent } from "../setup";
+import { getVeramo } from "../veramo";
 import { getWebviewContentForMessage } from "../webviews/message";
 
 export const verifyCommand = async (args: any) => {
@@ -36,7 +36,7 @@ export const verifyCommand = async (args: any) => {
       }
 
       try {
-        const message = await agent.handleMessage({ raw: selectedText });
+        const message = await getVeramo().handleMessage({ raw: selectedText });
 
         const panel = vscode.window.createWebviewPanel(
           'previewVerifiedData',

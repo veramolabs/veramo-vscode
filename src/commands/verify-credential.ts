@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { agent } from "../setup";
+import { getVeramo } from "../veramo";
 import { getWebviewContentForCredentialVerificationResult } from "../webviews/credentialVerification";
 
 export const verifyCredentialCommand = async (args: any) => {
@@ -35,7 +35,7 @@ export const verifyCredentialCommand = async (args: any) => {
         }
 
         try {
-          const result = await agent.verifyCredential({ credential: JSON.parse(selectedText) });
+          const result = await getVeramo().verifyCredential({ credential: JSON.parse(selectedText) });
 
           const panel = vscode.window.createWebviewPanel(
             'previewVerifiedCredential',

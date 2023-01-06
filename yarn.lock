@@ -1062,6 +1062,16 @@
   dependencies:
     "@veramo/core" "^4.2.0"
 
+"@veramo/remote-client@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@veramo/remote-client/-/remote-client-4.2.0.tgz#3afbaaab9268bae90592fc726d1853603742f773"
+  integrity sha512-XVd9V3WlGT5YVbtrXhGSRZREKvRr73p//lugy56dtGh0tNvCg8UIQW8vqYJBBTq5YjlobAkwTQHykGAkBH1bdQ==
+  dependencies:
+    "@veramo/core" "^4.2.0"
+    cross-fetch "^3.1.4"
+    debug "^4.3.3"
+    openapi-types "12.0.2"
+
 "@veramo/utils@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@veramo/utils/-/utils-4.2.0.tgz#43f5b90306aef7a3bb9dcee58eb03a6f4d573d5c"
@@ -2997,6 +3007,11 @@ onetime@^5.1.2:
   integrity sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==
   dependencies:
     mimic-fn "^2.1.0"
+
+openapi-types@12.0.2:
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/openapi-types/-/openapi-types-12.0.2.tgz#b752ab0a463c594fd7e3142e0e5983a9645503f6"
+  integrity sha512-GuTo7FyZjOIWVhIhQSWJVaws6A82sWIGyQogxxYBYKZ0NBdyP2CYSIgOwFfSB+UVoPExk/YzFpyYitHS8KVZtA==
 
 optionator@^0.9.1:
   version "0.9.1"

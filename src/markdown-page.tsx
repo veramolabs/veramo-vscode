@@ -1,8 +1,8 @@
 import * as React from "react";
 import * as ReactDOMServer from 'react-dom/server';
-import { agent } from './setup';
 import { decode } from 'html-entities';
 import { CredentialVerificationView } from "./webviews/CredentialVerificationView";
+import { veramo } from "./veramo/local-instance";
 
 function init() {
   // @ts-ignore
@@ -24,7 +24,7 @@ function init() {
       };
     }
 
-    agent.verifyCredential({ credential })
+    veramo.verifyCredential({ credential })
     .then(verifyResult => {
         container.outerHTML = ReactDOMServer.renderToStaticMarkup(
           <CredentialVerificationView verifyResult={verifyResult} />

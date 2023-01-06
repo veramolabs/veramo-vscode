@@ -60,7 +60,16 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.workspace.getConfiguration("veramo").update("enableCodeLens", false, true);
 	});
 
-  return {
+
+	vscode.commands.registerCommand("veramo.enableRemoteInstance", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableRemoteInstance", true, true);
+	});
+
+	vscode.commands.registerCommand("veramo.disableRemoteInstance", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableRemoteInstance", false, true);
+	});
+
+	return {
     extendMarkdownIt(md: MarkdownIt) {
         return md.use(markdownPlugin);
     }
