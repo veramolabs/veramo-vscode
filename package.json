@@ -46,8 +46,26 @@
 				"command": "veramo.resolve-did",
 				"title": "Resolve DID",
 				"category": "Veramo"
+			},
+			{
+				"title": "Enable CodeLens",
+				"command": "veramo.enableCodeLens",
+				"category": "Veramo"
+		},
+		{
+				"title": "Disable Codelens",
+				"command": "veramo.disableCodeLens",
+				"category": "Veramo"
+		}
+		],
+		"configuration": {
+			"properties": {
+					"veramo.enableCodeLens": {
+							"type": "boolean",
+							"default": true
+					}
 			}
-		]
+	}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run package",

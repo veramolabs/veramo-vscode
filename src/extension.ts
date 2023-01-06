@@ -7,6 +7,7 @@ import { verifyCommand } from "./commands/verify";
 import { resolveDidCommand } from "./commands/resolve-did";
 import { updateVerifiedStatusBarItem, verifiedStatusBarItem } from "./status-bar-items/verified-status-bar-item";
 import { triggerUpdateDecorations } from "./decorators/did-url-decorator";
+import { CodeBlocksProvider } from "./code-lens-providers/code-blocks-provider";
 
 export function activate(context: vscode.ExtensionContext) {
   
@@ -17,6 +18,8 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.languages.registerHoverProvider('markdown', didDocumentHoverProvider);
   vscode.languages.registerHoverProvider('javascript', didDocumentHoverProvider);
   vscode.languages.registerHoverProvider('typescript', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('json', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('yaml', didDocumentHoverProvider);
 
 	context.subscriptions.push(verifiedStatusBarItem);
   context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateVerifiedStatusBarItem));
@@ -43,6 +46,19 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}, null, context.subscriptions);
 
+
+
+  const codelensProvider = new CodeBlocksProvider();
+
+	vscode.languages.registerCodeLensProvider("*", codelensProvider);
+
+	vscode.commands.registerCommand("veramo.enableCodeLens", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableCodeLens", true, true);
+	});
+
+	vscode.commands.registerCommand("veramo.disableCodeLens", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableCodeLens", false, true);
+	});
 
   return {
     extendMarkdownIt(md: MarkdownIt) {
