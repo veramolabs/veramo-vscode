@@ -14,7 +14,7 @@ export async function updateVerifiedStatusBarItem() {
       const veramo = getVeramo();
       const result = await veramo.verifyCredential({credential: JSON.parse(text)});
       if (result.verified) {
-        verifiedStatusBarItem.text = `$(check) Verified (${veramo.context.name})`;
+        verifiedStatusBarItem.text = `$(check) Signed by ${result.issuer} (${veramo.context.name})`;
         verifiedStatusBarItem.show();
       }
       
