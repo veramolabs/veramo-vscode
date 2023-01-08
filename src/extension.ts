@@ -3,6 +3,7 @@ import type MarkdownIt from 'markdown-it';
 import { markdownPlugin } from "./markdown";
 import { didDocumentHoverProvider } from "./hover-providers/did-document-hover";
 import { verifyCredentialCommand } from "./commands/verify-credential";
+import { signCredentialCommand } from "./commands/sign-credential";
 import { verifyCommand } from "./commands/verify";
 import { resolveDidCommand } from "./commands/resolve-did";
 import { updateVerifiedStatusBarItem, verifiedStatusBarItem } from "./status-bar-items/verified-status-bar-item";
@@ -14,6 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand('veramo.verify-credential', verifyCredentialCommand));
   context.subscriptions.push(vscode.commands.registerCommand('veramo.verify', verifyCommand));
   context.subscriptions.push(vscode.commands.registerCommand('veramo.resolve-did', resolveDidCommand));
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.sign-credential', signCredentialCommand));
 
   vscode.languages.registerHoverProvider('markdown', didDocumentHoverProvider);
   vscode.languages.registerHoverProvider('javascript', didDocumentHoverProvider);

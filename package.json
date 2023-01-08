@@ -33,6 +33,11 @@
 		],
 		"commands": [
 			{
+				"command": "veramo.sign-credential",
+				"title": "Sign credential",
+				"category": "Veramo"
+			},
+			{
 				"command": "veramo.verify-credential",
 				"title": "Verify credential",
 				"category": "Veramo"
