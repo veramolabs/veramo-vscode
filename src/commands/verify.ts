@@ -15,7 +15,7 @@ export const verifyCommand = async (args: any) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       let selectedText: string;
-      if(args.str) {
+      if(args?.str) {
         selectedText = args.str;
         
       } else {
