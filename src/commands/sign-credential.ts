@@ -15,6 +15,7 @@ export const signCredentialCommand = async (args: any) => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       let selectedText: string;
+      let selectedRange: vscode.Range;
       if(args?.str) {
         selectedText = args.str;
       } else {
@@ -25,17 +26,23 @@ export const signCredentialCommand = async (args: any) => {
           return;
         }
         let selection: vscode.Selection = selections[0];
+        selectedRange = new vscode.Range(selection.start, selection.end);
         selectedText = editor.document.getText(
-          new vscode.Range(selection.start, selection.end
-          ));
+          new vscode.Range(selection.start, selection.end)
+        );
         if (selectedText.length < 1) {
-          selectedText = editor.document.getText()
+          selectedText = editor.document.getText();
+          selectedRange = new vscode.Range(
+            new vscode.Position(0,0),
+            new vscode.Position(editor.document.lineCount,0)
+          );
         }
       }
 
       try {
         const unsignedCredential = JSON.parse(selectedText);
         delete(unsignedCredential['proof']);
+        delete(unsignedCredential['issuer']);
 
         const identifiers = await getVeramo().didManagerFind();
 
@@ -46,7 +53,7 @@ export const signCredentialCommand = async (args: any) => {
           }
         );
 
-        unsignedCredential.issuer.id = selectedDid;
+        unsignedCredential.issuer = { id: selectedDid };
 
         const proofFormat: any = await vscode.window.showQuickPick(  
           ['EthereumEip712Signature2021', 'jwt', 'lds'],
@@ -65,11 +72,8 @@ export const signCredentialCommand = async (args: any) => {
 
         editor.edit((builder) => {
           builder.replace(
-            new vscode.Range(
-              new vscode.Position(0,0),
-              new vscode.Position(editor.document.lineCount,0),
-            ),
-            JSON.stringify(credential, null, 2)
+            selectedRange,
+            JSON.stringify(credential, null, 2) + '\n'
           );
         });
 
