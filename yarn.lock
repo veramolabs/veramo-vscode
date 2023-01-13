@@ -761,6 +761,13 @@
   resolved "https://registry.yarnpkg.com/@types/asn1js/-/asn1js-2.0.2.tgz#bb1992291381b5f06e22a829f2ae009267cdf8c5"
   integrity sha512-t4YHCgtD+ERvH0FyxvNlYwJ2ezhqw7t+Ygh4urQ7dJER8i185JPv6oIM3ey5YQmGN6Zp9EMbpohkjZi9t3UxwA==
 
+"@types/blake2@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/blake2/-/blake2-4.0.1.tgz#baecf440808cb82524190b38c56974115df20a51"
+  integrity sha512-zcBydVD4uEsGo5gFRfm2phVMLqgrGJqcTZaT6lkZMWJzYovUi6wwraUJKdY1eO92q0bhWWVSAH4OnSp2m7rCfQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/eslint-scope@^3.7.3":
   version "3.7.3"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.3.tgz#125b88504b61e3c8bc6f870882003253005c3224"
@@ -1445,7 +1452,7 @@ binary@~0.3.0:
     buffers "~0.1.1"
     chainsaw "~0.1.0"
 
-blakejs@^1.1.1:
+blakejs@^1.1.1, blakejs@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/blakejs/-/blakejs-1.2.1.tgz#5057e4206eadb4a97f7c0b6e197a505042fc3814"
   integrity sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==

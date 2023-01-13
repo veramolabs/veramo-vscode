@@ -9,8 +9,11 @@ import { resolveDidCommand } from "./commands/resolve-did";
 import { updateVerifiedStatusBarItem, verifiedStatusBarItem } from "./status-bar-items/verified-status-bar-item";
 import { triggerUpdateDecorations } from "./decorators/did-url-decorator";
 import { CodeBlocksProvider } from "./code-lens-providers/code-blocks-provider";
+import { VeramoExplorer } from "./tree-data-providers/veramo-explorer";
 
 export function activate(context: vscode.ExtensionContext) {
+
+	vscode.window.registerTreeDataProvider('veramoExplorer', new VeramoExplorer());
   
   context.subscriptions.push(vscode.commands.registerCommand('veramo.verify-credential', verifyCredentialCommand));
   context.subscriptions.push(vscode.commands.registerCommand('veramo.verify', verifyCommand));

@@ -1,6 +1,10 @@
 import * as vscode from "vscode";
 import { getVeramo } from "../veramo";
-import { getWebviewContentForMessage } from "../webviews/message";
+// import { CID, hasher } from 'multiformats';
+import pkg from 'blakejs'
+const { blake2bHex } = pkg
+import { posix } from 'path';
+
 
 export const signCredentialCommand = async (args: any) => {
   vscode.window.withProgress({
@@ -40,20 +44,49 @@ export const signCredentialCommand = async (args: any) => {
       }
 
       try {
-        const unsignedCredential = JSON.parse(selectedText);
-        delete(unsignedCredential['proof']);
-        delete(unsignedCredential['issuer']);
+        let unsignedCredential;
+        let replaceSelectedText = true;
+
+        // const bytes = Buffer.from(selectedText, 'base64');
+        // const hash = await hasher.from() ().digest(bytes);
+        // const cid = CID.create(1, 0x12, hash);
+
+        const cid = blake2bHex(selectedText);
+
+        try {
+          unsignedCredential = JSON.parse(selectedText);
+          delete(unsignedCredential['proof']);
+          delete(unsignedCredential['issuer']);
+        } catch (e) {
+          const path = vscode.workspace.asRelativePath(editor.document.uri);
+          unsignedCredential = {
+            credentialSubject: { 
+              id: cid, 
+              path
+            },
+            type: [ "VerifiableCredential", "SignedFile"]
+          };
+          
+          replaceSelectedText = false;
+        }
 
         const identifiers = await getVeramo().didManagerFind();
 
-        const selectedDid = await vscode.window.showQuickPick(  
-          identifiers.map(i => i.did),
+        const selectedDid = await vscode.window.showQuickPick<vscode.QuickPickItem>(  
+          identifiers.map(i => ({
+            label: i.did,
+            detail: i.alias
+          })),
           {
-            title: 'Select issuer DID'
+            title: 'Select issuer DID',
+            matchOnDetail: true
           }
         );
+        if (!selectedDid) {
+          return;
+        }
 
-        unsignedCredential.issuer = { id: selectedDid };
+        unsignedCredential.issuer = { id: selectedDid.label };
 
         const proofFormat: any = await vscode.window.showQuickPick(  
           ['EthereumEip712Signature2021', 'jwt', 'lds'],
@@ -70,13 +103,23 @@ export const signCredentialCommand = async (args: any) => {
           proofFormat
         });
 
-        editor.edit((builder) => {
-          builder.replace(
-            selectedRange,
-            JSON.stringify(credential, null, 2) + '\n'
-          );
-        });
-
+        if (replaceSelectedText) {
+          editor.edit((builder) => {
+            builder.replace(
+              selectedRange,
+              JSON.stringify(credential, null, 2) + '\n'
+            );
+          });
+        } else {
+          if (!vscode.workspace.workspaceFolders) {
+            return;
+          }
+          const contextFolder = vscode.workspace.getConfiguration("veramo").get("contextFolder", "context")
+          const folderUri = vscode.workspace.workspaceFolders[0].uri;
+          const fileUri = folderUri.with({ path: posix.join(folderUri.path, contextFolder, `${cid}.json`) });
+          vscode.workspace.fs.writeFile(fileUri, Buffer.from(JSON.stringify(credential), 'utf8'));
+          vscode.window.showInformationMessage('File was signed successfully');
+        }
       } catch (e: any) {
         vscode.window.showErrorMessage(e.message);
       }

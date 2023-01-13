@@ -24,6 +24,31 @@
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "veramo-explorer",
+					"title": "Veramo Explorer",
+					"icon": "media/logo.svg"
+				}
+			]
+		},
+		"views": {
+			"veramo-explorer": [
+				{
+					"id": "veramoExplorer",
+					"name": "Veramo explorer",
+					"icon": "media/logo.svg",
+					"contextualTitle": "Veramo Explorer"
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+				"view": "veramoExplorer",
+				"contents": "No remote Veramo instances configured.\n[Add Remote Instance](command:nodeDependencies.addEntry)"
+			}
+		],
 		"markdown.markdownItPlugins": true,
 		"markdown.previewScripts": [
 			"./dist/markdown-page.js"
@@ -91,6 +116,11 @@
 				"veramo.remoteAgentApiKey": {
 					"type": "string",
 					"default": "test123"
+				},
+				"veramo.contextFolder": {
+					"type": "string",
+					"default": "context",
+					"description": "Used for storing SignedFile credentials"
 				}
 			}
 		}
@@ -128,6 +158,7 @@
 		"webpack-cli": "^4.9.2"
 	},
 	"dependencies": {
+		"@types/blake2": "^4.0.1",
 		"@types/markdown-it": "^12.2.3",
 		"@veramo-community/react-components": "^1.1.2",
 		"@veramo/core": "^4.2.0",
@@ -136,6 +167,7 @@
 		"@veramo/did-resolver": "^4.2.0",
 		"@veramo/message-handler": "^4.2.0",
 		"@veramo/remote-client": "^4.2.0",
+		"blakejs": "^1.2.1",
 		"cross-fetch": "^3.1.5",
 		"date-fns": "^2.28.0",
 		"did-jwt-vc": "^3.1.0",
