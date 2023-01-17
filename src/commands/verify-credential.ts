@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { getVeramo } from "../veramo";
 import { getWebviewContentForCredentialVerificationResult } from "../webviews/credentialVerification";
+import yaml from 'yaml';
 
 export const verifyCredentialCommand = async (args: any) => {
     vscode.window.withProgress({
@@ -35,7 +36,17 @@ export const verifyCredentialCommand = async (args: any) => {
         }
 
         try {
-          const result = await getVeramo().verifyCredential({ credential: JSON.parse(selectedText) });
+          let credential;
+          try {
+            credential = JSON.parse(selectedText);
+          }catch(e) {
+            try {
+              credential = yaml.parse(selectedText);
+            } catch (e) {
+              throw (e);
+            }
+          }
+          const result = await getVeramo().verifyCredential({ credential });
 
           const panel = vscode.window.createWebviewPanel(
             'previewVerifiedCredential',

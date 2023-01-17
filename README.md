@@ -19,6 +19,12 @@ Select a `JWT` string and run `Veramo: Verify JWT` command
 
 ## Release Notes
 
+### 0.0.6
+
+* feat: support for `yaml` credentials
+* feat: sign markdown files using front matter
+
+
 ### 0.0.5
 
 * Rendering Verifiable Credentials using [@veramo-community/react-components](https://github.com/veramolabs/react-components) 
