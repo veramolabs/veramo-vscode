@@ -1,162 +1,86 @@
 import * as vscode from "vscode";
 import type MarkdownIt from 'markdown-it';
-import { agent } from "./setup";
-import { getWebviewContentForMessage } from "./webviews/message";
-import { getWebviewContentForDIDResolution } from "./webviews/diddocument";
 import { markdownPlugin } from "./markdown";
-import { getWebviewContentForCredentialVerificationResult } from "./webviews/credentialVerification";
+import { didDocumentHoverProvider } from "./hover-providers/did-document-hover";
+import { verifyCredentialCommand } from "./commands/verify-credential";
+import { signCredentialCommand } from "./commands/sign-credential";
+import { verifyCommand } from "./commands/verify";
+import { resolveDidCommand } from "./commands/resolve-did";
+import { updateVerifiedStatusBarItem, verifiedStatusBarItem } from "./status-bar-items/verified-status-bar-item";
+import { triggerUpdateDecorations } from "./decorators/did-url-decorator";
+import { CodeBlocksProvider } from "./code-lens-providers/code-blocks-provider";
+import { VeramoExplorer } from "./tree-data-providers/veramo-explorer";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+
+	vscode.window.registerTreeDataProvider('veramoExplorer', new VeramoExplorer());
   
-  context.subscriptions.push(vscode.commands.registerCommand('veramo.verifyCredential', async () => {
-    vscode.window.withProgress({
-			location: vscode.ProgressLocation.Notification,
-			title: "Verifying credential...",
-			cancellable: true
-		}, async (progress, token) => {
-			token.onCancellationRequested(() => {
-				console.log("User canceled the long running operation");
-			});
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.verify-credential', verifyCredentialCommand));
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.verify', verifyCommand));
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.resolve-did', resolveDidCommand));
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.sign-credential', signCredentialCommand));
 
-      const editor = vscode.window.activeTextEditor;
-      if (editor) {
-        let selections: readonly vscode.Selection[] = editor.selections;
-        if (selections.length > 1) {
-          vscode.window.showErrorMessage('[Veramo] Sorry, multiple text is not supported!');
-          return;
-        }
-        let selection: vscode.Selection = selections[0];
-        let selectedText:string = editor.document.getText(
-            new vscode.Range(selection.start, selection.end
-          ));
-        if (selectedText.length < 1) {
-          vscode.window.showErrorMessage('Please select text!');
-          return;
-        }
-  
-        try {
-          const result = await agent.verifyCredential({ credential: JSON.parse(selectedText) });
-  
-          const panel = vscode.window.createWebviewPanel(
-            'previewVerifiedCredential',
-            'Verified credential',
-            vscode.ViewColumn.Two,
-            {enableScripts: true}
-          );
-          panel.webview.html = getWebviewContentForCredentialVerificationResult(result);
-        } catch (e: any){
-          vscode.window.showErrorMessage(e.message);
-        }
-      }
+  vscode.languages.registerHoverProvider('markdown', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('javascript', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('typescript', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('json', didDocumentHoverProvider);
+  vscode.languages.registerHoverProvider('yaml', didDocumentHoverProvider);
 
-      return true;
-		});
+	context.subscriptions.push(verifiedStatusBarItem);
+  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateVerifiedStatusBarItem));
+	vscode.workspace.onDidSaveTextDocument(updateVerifiedStatusBarItem, null, context.subscriptions);
+
+  updateVerifiedStatusBarItem();
+
+  let activeEditor = vscode.window.activeTextEditor;
+
+  if (activeEditor) {
+		triggerUpdateDecorations();
+	}
+
+	vscode.window.onDidChangeActiveTextEditor(editor => {
+		activeEditor = editor;
+		if (editor) {
+			triggerUpdateDecorations();
+		}
+	}, null, context.subscriptions);
+
+	vscode.workspace.onDidChangeTextDocument(event => {
+		if (activeEditor && event.document === activeEditor.document) {
+			triggerUpdateDecorations(true);
+		}
+	}, null, context.subscriptions);
 
 
-  }));
 
-  context.subscriptions.push(vscode.commands.registerCommand('veramo.verify', async () => {
-    vscode.window.withProgress({
-			location: vscode.ProgressLocation.Notification,
-			title: "Verifying data...",
-			cancellable: true
-		}, async (progress, token) => {
-			token.onCancellationRequested(() => {
-				console.log("User canceled the long running operation");
-			});
+  const codelensProvider = new CodeBlocksProvider();
 
-      const editor = vscode.window.activeTextEditor;
-      if (editor) {
-        let selections: readonly vscode.Selection[] = editor.selections;
-        if (selections.length > 1) {
-          vscode.window.showErrorMessage('[Veramo] Sorry, multiple text is not supported!');
-          return;
-        }
-        let selection: vscode.Selection = selections[0];
-        let selectedText:string = editor.document.getText(
-            new vscode.Range(selection.start, selection.end
-          ));
-        if (selectedText.length < 1) {
-          vscode.window.showErrorMessage('Please select text!');
-          return;
-        }
-  
-        try {
-          const message = await agent.handleMessage({ raw: selectedText });
-  
-          const panel = vscode.window.createWebviewPanel(
-            'previewVerifiedData',
-            'Verified data',
-            vscode.ViewColumn.Two,
-            {enableScripts: true}
-          );
-          panel.webview.html = getWebviewContentForMessage(message);
-        } catch (e: any){
-          vscode.window.showErrorMessage(e.message);
-        }
-      }
+	vscode.languages.registerCodeLensProvider("*", codelensProvider);
 
-      return true;
-		});
+	vscode.commands.registerCommand("veramo.enableCodeLens", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableCodeLens", true, true);
+	});
+
+	vscode.commands.registerCommand("veramo.disableCodeLens", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableCodeLens", false, true);
+	});
 
 
-  }));
+	vscode.commands.registerCommand("veramo.enableRemoteInstance", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableRemoteInstance", true, true);
+	});
 
+	vscode.commands.registerCommand("veramo.disableRemoteInstance", () => {
+		vscode.workspace.getConfiguration("veramo").update("enableRemoteInstance", false, true);
+	});
 
-  context.subscriptions.push(vscode.commands.registerCommand('veramo.resolve', async () => {
-    vscode.window.withProgress({
-			location: vscode.ProgressLocation.Notification,
-			title: "Resolving DID...",
-			cancellable: true
-		}, async (progress, token) => {
-			token.onCancellationRequested(() => {
-				console.log("User canceled the long running operation");
-			});
-        
-      const editor = vscode.window.activeTextEditor;
-      if (editor) {
-        let selections: readonly vscode.Selection[] = editor.selections;
-        if (selections.length > 1) {
-          vscode.window.showErrorMessage('[Veramo] Sorry, multiple text is not supported!');
-          return;
-        }
-        let selection: vscode.Selection = selections[0];
-        let selectedText:string = editor.document.getText(
-            new vscode.Range(selection.start, selection.end
-          ));
-        if (selectedText.length < 1) {
-          vscode.window.showErrorMessage('Please select text!');
-          return;
-        }
-
-        try {
-          const result = await agent.resolveDid({ didUrl: selectedText });
-
-          const panel = vscode.window.createWebviewPanel(
-            'previewDidDocument',
-            'DID',
-            vscode.ViewColumn.Two,
-            {enableScripts: true}
-          );
-          panel.webview.html = getWebviewContentForDIDResolution(result);
-        } catch (e: any){
-          vscode.window.showErrorMessage(e.message);
-        }
-      }
-      return true;
-    });
-  }));
-
-  return {
+	return {
     extendMarkdownIt(md: MarkdownIt) {
         return md.use(markdownPlugin);
     }
   };
-
+  
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
-
