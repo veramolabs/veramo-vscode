@@ -45,7 +45,7 @@ export const signCredentialCommand = async (args: any) => {
       }
 
       try {
-        let unsignedCredential;
+        let unsignedCredential = {} as any;
         let replaceSelectedText = true;
         let format: 'json' | 'yaml' | undefined = undefined;
 
@@ -62,6 +62,9 @@ export const signCredentialCommand = async (args: any) => {
           }catch(e){
             try {
               unsignedCredential = yaml.parse(selectedText);
+              if (!unsignedCredential.credentialSubject) {
+                throw Error('Not YAML');
+              }
               format = 'yaml';
             } catch (e) {
               throw (e);
@@ -136,6 +139,10 @@ export const signCredentialCommand = async (args: any) => {
           vscode.workspace.fs.writeFile(fileUri, Buffer.from(JSON.stringify(credential), 'utf8'));
           vscode.window.showInformationMessage('File was signed successfully');
         }
+        setTimeout(()=>{          
+          vscode.commands.executeCommand('veramo.updateStatusBarItem');
+        }, 1000);
+        
       } catch (e: any) {
         vscode.window.showErrorMessage(e.message);
       }

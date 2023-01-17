@@ -20,10 +20,16 @@
 		"onCommand:veramo.verify",
 		"onCommand:veramo.verify-credential",
 		"onCommand:veramo.resolve-did",
+		"onCommand:veramo.sign-credential",
+		"onCommand:veramo.veramo.sign-markdown-matter",
 		"onCommand:veramo.enableCodeLens",
 		"onCommand:veramo.disableCodeLens",
 		"onCommand:veramo.enableRemoteInstance",
-		"onCommand:veramo.disableRemoteInstance"
+		"onCommand:veramo.disableRemoteInstance",
+		"onLanguage:markdown",
+		"onLanguage:json",
+		"onLanguage:yaml",
+		"onStartupFinished"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -60,6 +66,11 @@
 			"./style.css"
 		],
 		"commands": [
+			{
+				"command": "veramo.sign-markdown-matter",
+				"title": "Sign markdown (front matter)",
+				"category": "Veramo"
+			},
 			{
 				"command": "veramo.sign-credential",
 				"title": "Sign credential",
@@ -99,6 +110,11 @@
 				"title": "Disable Remote Instance",
 				"command": "veramo.disableRemoteInstance",
 				"category": "Veramo"
+			},
+			{
+				"title": "Update status bar item",
+				"command": "veramo.updateStatusBarItem",
+				"category": "Veramo"
 			}
 		],
 		"configuration": {
@@ -126,6 +142,9 @@
 					"description": "Used for storing SignedFile credentials"
 				}
 			}
+		},
+		"workbench.colorCustomizations": {
+			"error": "#FFAA00"
 		}
 	},
 	"scripts": {

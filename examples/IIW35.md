@@ -1,3 +1,20 @@
+---
+issuer:
+  id: >-
+    did:ethr:goerli:0x02a7a782d93e7456d2715e7701bfbdada46554dffb4d7196f14c1fe78a786c0ecd
+credentialSubject:
+  cid: >-
+    7323d518b62c6dfe0787b919da61828d4f2b7ab333e576bc850bee4c38579f1840b3a32bcde514e6567dd66f7b7760f3842a8f0133aec26052f811b737762c41
+type:
+  - VerifiableCredential
+'@context':
+  - 'https://www.w3.org/2018/credentials/v1'
+issuanceDate: '2023-01-17T15:43:24.000Z'
+proof:
+  type: JwtProof2020
+  jwt: >-
+    eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImNpZCI6IjczMjNkNTE4YjYyYzZkZmUwNzg3YjkxOWRhNjE4MjhkNGYyYjdhYjMzM2U1NzZiYzg1MGJlZTRjMzg1NzlmMTg0MGIzYTMyYmNkZTUxNGU2NTY3ZGQ2NmY3Yjc3NjBmMzg0MmE4ZjAxMzNhZWMyNjA1MmY4MTFiNzM3NzYyYzQxIn19LCJuYmYiOjE2NzM5NzAyMDQsImlzcyI6ImRpZDpldGhyOmdvZXJsaToweDAyYTdhNzgyZDkzZTc0NTZkMjcxNWU3NzAxYmZiZGFkYTQ2NTU0ZGZmYjRkNzE5NmYxNGMxZmU3OGE3ODZjMGVjZCJ9.4tFDMmoepuBLA1tqP_vWQKmLv0gwNs5eNYxuHWrUCvEOHNeIbkGJXxnriM9RAVCnmtp9D2IjCb14rMsv-mQH9g
+---
 ### November 16
 
 ```json+vc
