@@ -4,6 +4,7 @@ import { getVeramo } from "../veramo";
 import { posix } from 'path';
 import pkg from 'blakejs'
 const { blake2bHex } = pkg
+import yaml from 'yaml';
 
 const verifiedStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
 export { verifiedStatusBarItem };
@@ -20,7 +21,18 @@ export async function updateVerifiedStatusBarItem() {
       let result: IVerifyResult | undefined = undefined;
       let finished = false;
       try {
-        result = await veramo.verifyCredential({credential: JSON.parse(text)});
+        let credential;
+        try {
+          credential = JSON.parse(text);
+        }catch(e) {
+          try {
+            credential = yaml.parse(text);
+          } catch (e) {
+            throw (e);
+          }
+        }
+
+        result = await veramo.verifyCredential({credential});
       } catch (e) {
         if (vscode.workspace.workspaceFolders) {
           const cid = blake2bHex(text);

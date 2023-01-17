@@ -4,6 +4,7 @@ import { getVeramo } from "../veramo";
 import pkg from 'blakejs'
 const { blake2bHex } = pkg
 import { posix } from 'path';
+import yaml from 'yaml';
 
 
 export const signCredentialCommand = async (args: any) => {
@@ -46,6 +47,7 @@ export const signCredentialCommand = async (args: any) => {
       try {
         let unsignedCredential;
         let replaceSelectedText = true;
+        let format: 'json' | 'yaml' | undefined = undefined;
 
         // const bytes = Buffer.from(selectedText, 'base64');
         // const hash = await hasher.from() ().digest(bytes);
@@ -54,7 +56,17 @@ export const signCredentialCommand = async (args: any) => {
         const cid = blake2bHex(selectedText);
 
         try {
-          unsignedCredential = JSON.parse(selectedText);
+          try {
+            unsignedCredential = JSON.parse(selectedText);
+            format = 'json';
+          }catch(e){
+            try {
+              unsignedCredential = yaml.parse(selectedText);
+              format = 'yaml';
+            } catch (e) {
+              throw (e);
+            }
+          }
           delete(unsignedCredential['proof']);
           delete(unsignedCredential['issuer']);
         } catch (e) {
@@ -104,17 +116,21 @@ export const signCredentialCommand = async (args: any) => {
         });
 
         if (replaceSelectedText) {
+          const replacementText = format === 'json' 
+            ? JSON.stringify(credential, null, 2) + '\n'
+            : yaml.stringify(credential);
+
           editor.edit((builder) => {
             builder.replace(
               selectedRange,
-              JSON.stringify(credential, null, 2) + '\n'
+              replacementText 
             );
           });
         } else {
           if (!vscode.workspace.workspaceFolders) {
             return;
           }
-          const contextFolder = vscode.workspace.getConfiguration("veramo").get("contextFolder", "context")
+          const contextFolder = vscode.workspace.getConfiguration("veramo").get("contextFolder", "context");
           const folderUri = vscode.workspace.workspaceFolders[0].uri;
           const fileUri = folderUri.with({ path: posix.join(folderUri.path, contextFolder, `${cid}.json`) });
           vscode.workspace.fs.writeFile(fileUri, Buffer.from(JSON.stringify(credential), 'utf8'));

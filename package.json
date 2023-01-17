@@ -176,12 +176,14 @@
 		"did-jwt-vc": "^3.1.0",
 		"did-resolver": "^4.0.1",
 		"ethr-did-resolver": "^8.0.0",
+		"gray-matter": "^4.0.3",
 		"html-entities": "^2.3.3",
 		"json-pretty-html": "^1.1.6",
 		"jwt-decode": "^3.1.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-server": "^0.8.1",
-		"web-did-resolver": "^2.0.21"
+		"web-did-resolver": "^2.0.21",
+		"yaml": "^2.2.1"
 	}
 }
