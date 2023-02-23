@@ -1,8 +1,10 @@
 import * as React from "react";
 import * as ReactDOMServer from 'react-dom/server';
 import { decode } from 'html-entities';
-import { CredentialVerificationView } from "./webviews/CredentialVerificationView";
+import { CredentialVerificationView } from "./webviews/components/CredentialVerificationView";
 import { veramo } from "./veramo/local-instance";
+import { normalizeCredential } from 'did-jwt-vc';
+import { VerifiableCredential } from "@veramo/core";
 
 function init() {
   // @ts-ignore
@@ -11,34 +13,42 @@ function init() {
     const lang = container.dataset.lang;
     const decoded = decode(container.dataset.source);
     const parsed = JSON.parse(decoded);
-    let credential = null;
+    let credential: VerifiableCredential | undefined = undefined;
 
-    if (lang === 'json+vc') {
-      credential = JSON.parse(parsed);
-    } else if (lang === 'jwt+vc') {
-      credential = {
-        proof: {
-          type: "JwtProof2020",
-          jwt: parsed.replace(/\s/g, '')
-        }
-      };
-    }
-
-    veramo.verifyCredential({ credential })
-    .then(verifyResult => {
-        container.outerHTML = ReactDOMServer.renderToStaticMarkup(
-          <CredentialVerificationView verifyResult={verifyResult} />
-        );
-    })
-    .catch((e: any) => {
+    try {
+      if (lang === 'json+vc') {
+        credential = JSON.parse(parsed);
+      } else if (lang === 'jwt+vc') {
+        credential = normalizeCredential(parsed.replace(/\s/g, ''));
+      }
+  
+      if (credential) {
+        veramo.verifyCredential({ credential })
+        .then(verifyResult => {
+          container.outerHTML = ReactDOMServer.renderToStaticMarkup(
+            <CredentialVerificationView verifyResult={verifyResult} credential={credential} />
+          );
+        })
+        .catch((e: any) => {
+          //@ts-ignore
+          const out = document.createElement('div');
+          out.innerHTML = `Unable to verify. ${e.message}`;
+          out.style.color = 'red';
+          container.appendChild(out);
+          
+          container.append();
+        });
+      }
+        
+    } catch (e: any) {
       //@ts-ignore
       const out = document.createElement('div');
-      out.innerHTML = `Unable to verify. Please allow all content and script execution`;
+      out.innerHTML = `Error: ${e.message}`;
       out.style.color = 'red';
       container.appendChild(out);
 
       container.append();
-    });
+    }
 
   }
 

@@ -8,7 +8,7 @@ import { ICredentialIssuer, ICredentialVerifier } from "@veramo/credential-w3c";
 export type InstalledPlugins = IResolver & IMessageHandler & ICredentialIssuer & ICredentialVerifier & IDIDManager;
 
 export const getVeramo = (): TAgent<InstalledPlugins> => {
-  const enabled = vscode.workspace.getConfiguration("veramo").get("enableRemoteInstance", false);
+  const enabled = vscode.workspace.getConfiguration("veramo").get("useRemoteInstance", false);
   if (enabled) {
     return remoteInstance;
   } else {

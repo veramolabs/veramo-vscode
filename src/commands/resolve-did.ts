@@ -1,8 +1,10 @@
 import * as vscode from "vscode";
 import { getVeramo } from "../veramo";
-import { getWebviewContentForDIDResolution } from "../webviews/diddocument";
+import { getWebviewContentForDIDResolution } from "../webviews/did-resolution";
 
-export const resolveDidCommand = async () => {
+export const resolveDidCommand = (context: vscode.ExtensionContext) => async () => {
+  const extensionUri = context.extensionUri;
+
   vscode.window.withProgress({
     location: vscode.ProgressLocation.Notification,
     title: "Resolving DID...",
@@ -33,11 +35,11 @@ export const resolveDidCommand = async () => {
 
         const panel = vscode.window.createWebviewPanel(
           'previewDidDocument',
-          'DID',
+          'DID resolution',
           vscode.ViewColumn.Two,
           { enableScripts: true }
         );
-        panel.webview.html = getWebviewContentForDIDResolution(result);
+        panel.webview.html = getWebviewContentForDIDResolution(result, panel.webview, extensionUri);
       } catch (e: any) {
         vscode.window.showErrorMessage(e.message);
       }

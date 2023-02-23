@@ -6,6 +6,7 @@
 	"license": "Apache-2",
 	"publisher": "veramo",
 	"icon": "images/logo.png",
+	"type": "module",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/veramolabs/veramo-vscode.git"
@@ -17,21 +18,12 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:veramo.verify",
-		"onCommand:veramo.verify-credential",
-		"onCommand:veramo.resolve-did",
-		"onCommand:veramo.sign-credential",
-		"onCommand:veramo.veramo.sign-markdown-matter",
-		"onCommand:veramo.enableCodeLens",
-		"onCommand:veramo.disableCodeLens",
-		"onCommand:veramo.enableRemoteInstance",
-		"onCommand:veramo.disableRemoteInstance",
 		"onLanguage:markdown",
 		"onLanguage:json",
 		"onLanguage:yaml",
 		"onStartupFinished"
 	],
-	"main": "./dist/extension.js",
+	"main": "./dist/extension.cjs",
 	"contributes": {
 		"viewsContainers": {
 			"activitybar": [
@@ -60,10 +52,10 @@
 		],
 		"markdown.markdownItPlugins": true,
 		"markdown.previewScripts": [
-			"./dist/markdown-page.js"
+			"./dist/markdown-page.cjs"
 		],
 		"markdown.previewStyles": [
-			"./style.css"
+			"./dist/main.css"
 		],
 		"commands": [
 			{
@@ -102,13 +94,13 @@
 				"category": "Veramo"
 			},
 			{
-				"title": "Enable Remote Instance",
-				"command": "veramo.enableRemoteInstance",
+				"title": "Use Remote Instance",
+				"command": "veramo.useRemoteInstance",
 				"category": "Veramo"
 			},
 			{
-				"title": "Disable Remote Instance",
-				"command": "veramo.disableRemoteInstance",
+				"title": "Use Local Instance",
+				"command": "veramo.useLocalInstance",
 				"category": "Veramo"
 			},
 			{
@@ -121,12 +113,13 @@
 			"properties": {
 				"veramo.enableCodeLens": {
 					"type": "boolean",
-					"default": true
+					"default": true,
+					"description": "Show inline verification results of 'json+vc' / 'jwt+vc' code blocks in markdown files"
 				},
-				"veramo.enableRemoteInstance": {
+				"veramo.useRemoteInstance": {
 					"type": "boolean",
 					"default": false,
-					"description": "Start your remote server by running `npx @veramo/cli server`"
+					"description": "You can start your remote instance by running `npx @veramo/cli server`"
 				},
 				"veramo.remoteAgentUrl": {
 					"type": "string",
@@ -150,59 +143,84 @@
 	"scripts": {
 		"vscode:prepublish": "yarn run package",
 		"compile": "webpack",
-		"compile-page:dev": "webpack --config ./webpack-page.config.js",
-		"compile-page": "webpack --mode=production --config ./webpack-page.config.js",
+		"compile-page:dev": "webpack --config ./webpack-page.config.cjs",
+		"compile-page": "webpack --mode=production --config ./webpack-page.config.cjs",
 		"watch": "webpack --watch",
-		"watch-page": "webpack --watch --config ./webpack-page.config.js",
+		"watch-page": "webpack --watch --config ./webpack-page.config.cjs",
 		"package": "webpack --mode production --devtool hidden-source-map && yarn compile-page",
 		"compile-tests": "tsc -p . --outDir out",
 		"watch-tests": "tsc -p . -w --outDir out",
 		"pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"update:veramo": "yarn add @veramo/core @veramo/credential-w3c @veramo/did-jwt @veramo/did-resolver @veramo/message-handler did-jwt-vc did-resolver ethr-did-resolver web-did-resolver @veramo/remote-client"
+		"update:veramo": "pnpm add @veramo/core @veramo/credential-w3c @veramo/credential-eip712 @veramo/did-jwt @veramo/did-resolver @veramo/message-handler did-jwt-vc did-resolver ethr-did-resolver web-did-resolver @veramo/remote-client @veramo/did-provider-key @veramo/did-provider-pkh",
+		"update:veramo:next": "pnpm add @veramo/core@next @veramo/credential-w3c@next @veramo/credential-eip712@next @veramo/did-jwt@next @veramo/did-resolver@next @veramo/message-handler@next did-jwt-vc did-resolver ethr-did-resolver web-did-resolver @veramo/remote-client@next @veramo/did-provider-key@next @veramo/did-provider-pkh@next"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.1.0",
 		"@types/node": "14.x",
+		"@types/react": "^18.0.27",
 		"@types/react-dom": "^18.0.8",
 		"@types/vscode": "^1.65.0",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^5.12.1",
 		"@vscode/test-electron": "^2.1.2",
+		"css-loader": "^6.7.3",
 		"eslint": "^8.9.0",
 		"glob": "^7.2.0",
+		"mini-css-extract-plugin": "^2.7.2",
 		"mocha": "^9.2.1",
-		"ts-loader": "^9.2.6",
-		"typescript": "^4.5.5",
-		"webpack": "^5.69.1",
-		"webpack-cli": "^4.9.2"
+		"ts-loader": "^9.4.2",
+		"typescript": "^4.9.5",
+		"webpack": "^5.75.0",
+		"webpack-cli": "^4.10.0"
 	},
 	"dependencies": {
+		"@ceramicnetwork/3id-did-resolver": "^2.13.0",
+		"@ceramicnetwork/http-client": "^2.17.0",
+		"@ipld/dag-pb": "^4.0.2",
+		"@transmute/credentials-context": "0.7.0-unstable.80",
 		"@types/blake2": "^4.0.1",
 		"@types/markdown-it": "^12.2.3",
-		"@veramo-community/react-components": "^1.1.2",
-		"@veramo/core": "^4.2.0",
-		"@veramo/credential-w3c": "^4.2.0",
-		"@veramo/did-jwt": "^4.2.0",
-		"@veramo/did-resolver": "^4.2.0",
-		"@veramo/message-handler": "^4.2.0",
-		"@veramo/remote-client": "^4.2.0",
-		"blakejs": "^1.2.1",
+		"@veramo-community/react-components": "^1.3.0",
+		"@veramo/core": "5.0.1-next.12",
+		"@veramo/credential-eip712": "5.0.1-next.12",
+		"@veramo/credential-ld": "^5.0.0",
+		"@veramo/credential-w3c": "5.0.1-next.12",
+		"@veramo/did-jwt": "5.0.1-next.12",
+		"@veramo/did-provider-key": "5.0.1-next.12",
+		"@veramo/did-provider-pkh": "5.0.1-next.12",
+		"@veramo/did-resolver": "5.0.1-next.12",
+		"@veramo/message-handler": "5.0.1-next.12",
+		"@veramo/remote-client": "5.0.1-next.12",
+		"buffer": "^6.0.3",
 		"cross-fetch": "^3.1.5",
+		"crypto-browserify": "^3.12.0",
 		"date-fns": "^2.28.0",
 		"did-jwt-vc": "^3.1.0",
 		"did-resolver": "^4.0.1",
 		"ethr-did-resolver": "^8.0.0",
 		"gray-matter": "^4.0.3",
 		"html-entities": "^2.3.3",
-		"json-pretty-html": "^1.1.6",
 		"jwt-decode": "^3.1.2",
+		"multiformats": "^11.0.1",
+		"process": "^0.11.10",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-server": "^0.8.1",
+		"stream-browserify": "^3.0.0",
 		"web-did-resolver": "^2.0.21",
 		"yaml": "^2.2.1"
+	},
+	"enabledApiProposals": [
+		"extensionRuntime"
+	],
+	"pnpm": {
+		"peerDependencyRules": {
+			"ignoreMissing": [
+				"expo",
+				"react-native"
+			]
+		}
 	}
 }

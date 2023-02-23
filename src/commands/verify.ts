@@ -2,7 +2,9 @@ import * as vscode from "vscode";
 import { getVeramo } from "../veramo";
 import { getWebviewContentForMessage } from "../webviews/message";
 
-export const verifyCommand = async (args: any) => {
+export const verifyCommand = (context: vscode.ExtensionContext) => async (args: any) => {
+  const extensionUri = context.extensionUri;
+
   vscode.window.withProgress({
     location: vscode.ProgressLocation.Notification,
     title: "Verifying data...",
@@ -44,7 +46,7 @@ export const verifyCommand = async (args: any) => {
           vscode.ViewColumn.Two,
           { enableScripts: true }
         );
-        panel.webview.html = getWebviewContentForMessage(message);
+        panel.webview.html = getWebviewContentForMessage(message, panel.webview, extensionUri);
       } catch (e: any) {
         vscode.window.showErrorMessage(e.message);
       }

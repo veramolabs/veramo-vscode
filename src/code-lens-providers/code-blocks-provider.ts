@@ -1,3 +1,4 @@
+import { VerifiableCredential } from '@veramo/core';
 import * as vscode from 'vscode';
 import { getVeramo } from '../veramo';
 
@@ -37,11 +38,31 @@ export class CodeBlocksProvider implements vscode.CodeLensProvider {
 			const start = new vscode.Position(line.lineNumber, 0);
 			const end = new vscode.Position(line.lineNumber, 1);
 			const range = new vscode.Range(start, end);
-			this.codeLenses.push(new vscode.CodeLens(range, {
-				title: 'Verifiable Credential',
-				command: 'veramo.verify-credential',
-				arguments: [{str: matches[1]}]
-			}));
+
+			try {
+				const credential = JSON.parse(matches[1]) as VerifiableCredential;
+				const result = await getVeramo().verifyCredential({ credential });
+				let title = '';
+				if (result.verified) {
+					const issuer = (credential.issuer as any).id ? (credential.issuer as any).id : credential.issuer;
+					title = `Verifiable Credential signed by ${issuer}`;
+				} else if (result.error) {
+					title = `Error: ${result.error.message}`;
+				}
+				this.codeLenses.push(new vscode.CodeLens(range, {
+					title,
+					command: 'veramo.verify-credential',
+					arguments: [{str: matches[1]}]
+				}));
+
+			} catch (e: any) {
+				this.codeLenses.push(new vscode.CodeLens(range, {
+					title: `Error: ${e.message}`,
+					command: 'veramo.verify-credential',
+					arguments: [{str: matches[1]}]
+				}));
+			}
+
 		}
 
 		while ((matches = this.regexJwtVc.exec(text)) !== null) {

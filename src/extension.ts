@@ -16,9 +16,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.window.registerTreeDataProvider('veramoExplorer', new VeramoExplorer());
   
-  context.subscriptions.push(vscode.commands.registerCommand('veramo.verify-credential', verifyCredentialCommand));
-  context.subscriptions.push(vscode.commands.registerCommand('veramo.verify', verifyCommand));
-  context.subscriptions.push(vscode.commands.registerCommand('veramo.resolve-did', resolveDidCommand));
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.verify-credential', verifyCredentialCommand(context)));
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.verify', verifyCommand(context)));
+  context.subscriptions.push(vscode.commands.registerCommand('veramo.resolve-did', resolveDidCommand(context)));
   context.subscriptions.push(vscode.commands.registerCommand('veramo.sign-credential', signCredentialCommand));
   context.subscriptions.push(vscode.commands.registerCommand('veramo.sign-markdown-matter', signMarkdownMatterCommand));
   context.subscriptions.push(vscode.commands.registerCommand('veramo.updateStatusBarItem', updateVerifiedStatusBarItem));
@@ -69,12 +69,12 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 
-	vscode.commands.registerCommand("veramo.enableRemoteInstance", () => {
-		vscode.workspace.getConfiguration("veramo").update("enableRemoteInstance", true, true);
+	vscode.commands.registerCommand("veramo.useRemoteInstance", () => {
+		vscode.workspace.getConfiguration("veramo").update("useRemoteInstance", true, true);
 	});
 
-	vscode.commands.registerCommand("veramo.disableRemoteInstance", () => {
-		vscode.workspace.getConfiguration("veramo").update("enableRemoteInstance", false, true);
+	vscode.commands.registerCommand("veramo.useLocalInstance", () => {
+		vscode.workspace.getConfiguration("veramo").update("useRemoteInstance", false, true);
 	});
 
 	return {
