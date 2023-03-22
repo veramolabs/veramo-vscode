@@ -23,7 +23,7 @@ function init() {
       }
   
       if (credential) {
-        veramo.verifyCredential({ credential })
+        veramo.verifyCredential({ credential, fetchRemoteContexts: true })
         .then(verifyResult => {
           container.outerHTML = ReactDOMServer.renderToStaticMarkup(
             <CredentialVerificationView verifyResult={verifyResult} credential={credential} />

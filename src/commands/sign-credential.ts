@@ -109,7 +109,8 @@ export const signCredentialCommand = async (args: any) => {
         }
         const credential = await getVeramo().createVerifiableCredential({
           credential: unsignedCredential,
-          proofFormat
+          proofFormat,
+          fetchRemoteContexts: true
         });
 
         if (replaceSelectedText) {

@@ -48,7 +48,7 @@ export const verifyCredentialCommand = (context: vscode.ExtensionContext) => asy
               throw (e);
             }
           }
-          const result = await getVeramo().verifyCredential({ credential });
+          const result = await getVeramo().verifyCredential({ credential, fetchRemoteContexts: true });
 
           if (result.verified) {
             const panel = vscode.window.createWebviewPanel(
