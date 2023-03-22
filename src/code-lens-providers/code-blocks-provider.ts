@@ -1,6 +1,7 @@
 import { VerifiableCredential } from '@veramo/core';
 import * as vscode from 'vscode';
 import { getVeramo } from '../veramo';
+import { formatRelative } from 'date-fns';
 
 /**
  * CodelensProvider
@@ -41,11 +42,12 @@ export class CodeBlocksProvider implements vscode.CodeLensProvider {
 
 			try {
 				const credential = JSON.parse(matches[1]) as VerifiableCredential;
-				const result = await getVeramo().verifyCredential({ credential });
+				const result = await getVeramo().verifyCredential({ credential, fetchRemoteContexts: true });
 				let title = '';
 				if (result.verified) {
 					const issuer = (credential.issuer as any).id ? (credential.issuer as any).id : credential.issuer;
-					title = `Verifiable Credential signed by ${issuer}`;
+					const relativeDate = formatRelative(new Date(credential.issuanceDate), new Date());
+					title = `Verifiable Credential signed by ${issuer} ∙ ${relativeDate}`;
 				} else if (result.error) {
 					title = `Error: ${result.error.message}`;
 				}
@@ -73,7 +75,18 @@ export class CodeBlocksProvider implements vscode.CodeLensProvider {
 			const range = new vscode.Range(start, end);
 			try{
 				const message = await getVeramo().handleMessage({raw: matches[1]});
-				let title = `${message.type} ${message.from} ${message.createdAt}`;
+				let type = '';
+				switch(message.type) {
+					case 'w3c.vc':
+						type='Verifiable credential';
+						break;
+					case 'w3c.vp':
+						type='Verifiable presentation';
+						break;
+				}
+				const relativeDate = formatRelative(new Date(message.createdAt!), new Date());
+
+				let title = `${type} signed by ${message.from} ∙ ${relativeDate}`;
 
 				this.codeLenses.push(new vscode.CodeLens(range, {
 					title,
