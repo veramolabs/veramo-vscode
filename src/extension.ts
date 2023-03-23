@@ -14,7 +14,7 @@ import { VeramoExplorer } from "./tree-data-providers/veramo-explorer";
 
 export function activate(context: vscode.ExtensionContext) {
 
-	vscode.window.registerTreeDataProvider('veramoExplorer', new VeramoExplorer());
+	// vscode.window.registerTreeDataProvider('veramoExplorer', new VeramoExplorer());
   
   context.subscriptions.push(vscode.commands.registerCommand('veramo.verify-credential', verifyCredentialCommand(context)));
   context.subscriptions.push(vscode.commands.registerCommand('veramo.verify', verifyCommand(context)));

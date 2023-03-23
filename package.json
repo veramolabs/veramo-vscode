@@ -25,31 +25,6 @@
 	],
 	"main": "./dist/extension.cjs",
 	"contributes": {
-		"viewsContainers": {
-			"activitybar": [
-				{
-					"id": "veramo-explorer",
-					"title": "Veramo Explorer",
-					"icon": "media/logo.svg"
-				}
-			]
-		},
-		"views": {
-			"veramo-explorer": [
-				{
-					"id": "veramoExplorer",
-					"name": "Veramo explorer",
-					"icon": "media/logo.svg",
-					"contextualTitle": "Veramo Explorer"
-				}
-			]
-		},
-		"viewsWelcome": [
-			{
-				"view": "veramoExplorer",
-				"contents": "No remote Veramo instances configured.\n[Add Remote Instance](command:nodeDependencies.addEntry)"
-			}
-		],
 		"markdown.markdownItPlugins": true,
 		"markdown.previewScripts": [
 			"./dist/markdown-page.cjs"
