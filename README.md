@@ -21,16 +21,3 @@ Verifiable data management using [Veramo](https://veramo.io) framework
   - as a selection
 * Sign any file and store VCreds in a context folder
 * Sign Markdown files using front matter
-
-### Resolving a DID Document 
-
-Select a `did` string and run `Veramo: Resolve DID` command
-
-![Resolve DID](images/resolve-did.gif)
-
-### Verifying W3C JWT Verifiable Credentials and Presentations
-
-Select a `JWT` string and run `Veramo: Verify JWT` command
-
-![Verify JWT](images/verify-jwt.gif)
-
