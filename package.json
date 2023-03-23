@@ -187,9 +187,6 @@
 		"web-did-resolver": "^2.0.21",
 		"yaml": "^2.2.1"
 	},
-	"enabledApiProposals": [
-		"extensionRuntime"
-	],
 	"pnpm": {
 		"peerDependencyRules": {
 			"ignoreMissing": [
