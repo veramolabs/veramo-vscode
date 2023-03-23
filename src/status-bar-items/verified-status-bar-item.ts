@@ -56,7 +56,7 @@ export async function updateVerifiedStatusBarItem() {
               };
               verifiedStatusBarItem.show();
             } else if (result?.verifiableCredential?.credentialSubject?.cid && result?.verifiableCredential?.credentialSubject?.cid !== cid) {
-              verifiedStatusBarItem.text = `$(error) CID don't match`;
+              verifiedStatusBarItem.text = `$(error) Content does not match signature`;
               verifiedStatusBarItem.command = {
                 title: 'Verify credential',
                 command: 'veramo.verify-credential',
