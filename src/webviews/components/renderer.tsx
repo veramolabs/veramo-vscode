@@ -1,6 +1,15 @@
-import { VerifiableCredential, VerifiablePresentation } from "@veramo/core";
+import * as React from "react";
+import * as ReactDOMServer from 'react-dom/server';
 import { formatDistanceToNow } from 'date-fns';
-import { credentialToHTML } from "./credential";
+import { VerifiableCredential, VerifiablePresentation } from "@veramo/core";
+import { VerifiableCredential as VerifiableCredentialView } from '@veramo-community/react-components';
+import '@veramo-community/react-components/dist/esm/index.css';
+
+export function credentialToHTML(vc: VerifiableCredential) {
+  return ReactDOMServer.renderToStaticMarkup(
+    <VerifiableCredentialView credential={vc} />
+  );
+}
 
 export function presentationToHTML(vp: VerifiablePresentation, jwt?: string) {
   //FIXME there is something weird with VerifiablePresentation type in the @next branch
@@ -24,21 +33,6 @@ export function presentationToHTML(vp: VerifiablePresentation, jwt?: string) {
               by <b>${issuer}</b>
             </div>
           </div>`;
-}
-
-function objectToTableRows(obj: any): string {
-  let result = "";
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      const element = obj[key];
-      result += `<tr><td>${key}</td><td>${
-        typeof element === "string"
-          ? element
-          : "<table>" + objectToTableRows(element) + "</table>"
-      }</td></tr>`;
-    }
-  }
-  return result;
 }
 
 const checkmark = `<svg xmlns="http://www.w3.org/2000/svg" title="Verified" width="16" height="16" viewBox="0 0 1200 1200">

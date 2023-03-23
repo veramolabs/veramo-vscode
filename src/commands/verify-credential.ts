@@ -1,9 +1,11 @@
 import * as vscode from "vscode";
 import { getVeramo } from "../veramo";
-import { getWebviewContentForCredentialVerificationResult } from "../webviews/credentialVerification";
+import { getWebviewContentForCredentialVerificationResult } from "../webviews/credential-verification";
 import yaml from 'yaml';
 
-export const verifyCredentialCommand = async (args: any) => {
+export const verifyCredentialCommand = (context: vscode.ExtensionContext) => async (args: any) => {
+    const extensionUri = context.extensionUri;
+
     vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
       title: "Verifying credential...",
@@ -46,15 +48,19 @@ export const verifyCredentialCommand = async (args: any) => {
               throw (e);
             }
           }
-          const result = await getVeramo().verifyCredential({ credential });
+          const result = await getVeramo().verifyCredential({ credential, fetchRemoteContexts: true });
 
-          const panel = vscode.window.createWebviewPanel(
-            'previewVerifiedCredential',
-            'Verified credential',
-            vscode.ViewColumn.Two,
-            { enableScripts: true }
-          );
-          panel.webview.html = getWebviewContentForCredentialVerificationResult(result);
+          if (result.verified) {
+            const panel = vscode.window.createWebviewPanel(
+              'previewVerifiedCredential',
+              'Verified credential',
+              vscode.ViewColumn.Two,
+              { enableScripts: true }
+              );
+              panel.webview.html = getWebviewContentForCredentialVerificationResult(result, credential, panel.webview, extensionUri);
+          } else if (result.error) {
+            vscode.window.showErrorMessage(`Error: ${result.error.message}`);
+          }
         } catch (e: any) {
           vscode.window.showErrorMessage(e.message);
         }

@@ -1,9 +1,7 @@
 import * as vscode from "vscode";
-import { getVeramo } from "../veramo";
-// import { CID, hasher } from 'multiformats';
-import pkg from 'blakejs'
-const { blake2bHex } = pkg
 import matter from 'gray-matter';
+import { getVeramo } from "../veramo";
+import { generateCIDForString } from '../utils';
 
 
 export const signMarkdownMatterCommand = async (args: any) => {
@@ -29,15 +27,9 @@ export const signMarkdownMatterCommand = async (args: any) => {
 
       try {
         let unsignedCredential;
-        let replaceSelectedText = true;
-        
         const parsed = matter(selectedText);
 
-        // const bytes = Buffer.from(selectedText, 'base64');
-        // const hash = await hasher.from() ().digest(bytes);
-        // const cid = CID.create(1, 0x12, hash);
-
-        const cid = blake2bHex(parsed.content);
+        const cid = await generateCIDForString(parsed.content);
         unsignedCredential = parsed.data as any;        
         delete(unsignedCredential['proof']);
         delete(unsignedCredential['issuer']);

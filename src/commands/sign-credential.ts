@@ -1,10 +1,8 @@
 import * as vscode from "vscode";
 import { getVeramo } from "../veramo";
-// import { CID, hasher } from 'multiformats';
-import pkg from 'blakejs'
-const { blake2bHex } = pkg
 import { posix } from 'path';
 import yaml from 'yaml';
+import { generateCIDForString } from "../utils";
 
 
 export const signCredentialCommand = async (args: any) => {
@@ -49,11 +47,7 @@ export const signCredentialCommand = async (args: any) => {
         let replaceSelectedText = true;
         let format: 'json' | 'yaml' | undefined = undefined;
 
-        // const bytes = Buffer.from(selectedText, 'base64');
-        // const hash = await hasher.from() ().digest(bytes);
-        // const cid = CID.create(1, 0x12, hash);
-
-        const cid = blake2bHex(selectedText);
+        const cid = await generateCIDForString(selectedText);
 
         try {
           try {
@@ -115,7 +109,8 @@ export const signCredentialCommand = async (args: any) => {
         }
         const credential = await getVeramo().createVerifiableCredential({
           credential: unsignedCredential,
-          proofFormat
+          proofFormat,
+          fetchRemoteContexts: true
         });
 
         if (replaceSelectedText) {

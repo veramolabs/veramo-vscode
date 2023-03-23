@@ -1,5 +1,6 @@
 import { HoverProvider, Hover } from "vscode";
-import { didDocumentResolutionToMarkdown, DID_MATCHER } from "../utils";
+import yaml from 'yaml';
+import { DID_MATCHER } from "../utils";
 import { getVeramo } from "../veramo";
 
 export const didDocumentHoverProvider: HoverProvider = {
@@ -12,7 +13,7 @@ export const didDocumentHoverProvider: HoverProvider = {
 
     try {
       const resolutionResult = await getVeramo().resolveDid({ didUrl });
-      contents = didDocumentResolutionToMarkdown(resolutionResult);
+      contents = `\`\`\`yaml\n${yaml.stringify(resolutionResult, null, 2)}\n\`\`\``;
     } catch (e: any) {
       contents = 'Error: ' + e.message;
     }

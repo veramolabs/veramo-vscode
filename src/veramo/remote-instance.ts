@@ -2,7 +2,7 @@ import "cross-fetch/polyfill";
 import * as vscode from "vscode";
 import { createAgent, TAgent } from "@veramo/core";
 import { AgentRestClient } from '@veramo/remote-client';
-import { InstalledPlugins } from './index';
+import { InstalledPlugins } from './index.js';
 
 export const veramo: TAgent<InstalledPlugins> = createAgent<InstalledPlugins>({
   context: {
