@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [0.0.7] - 2023-02-23
+## [0.0.7] - 2023-03-23
 
 ### Added
 
@@ -12,6 +12,7 @@
 * support for `did:pkh`
 * support for `JSON-LD` credentials
 * code lens shows issuer did
+* show issuer DID in Markdown preview (front-matter)
 
 ### Changed
 
